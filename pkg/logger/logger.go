@@ -5,51 +5,40 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
-	"os"
-
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var logger *slog.Logger
+type Logger struct {
+	*slog.Logger
+}
 
-func MustInit(path string, maxSizeMB, maxBackups, maxDays int, level string) {
-	var logWriter io.Writer = &lumberjack.Logger{
-		Filename:   path,       // log file path
-		MaxSize:    maxSizeMB,  // file max size in MB
-		MaxBackups: maxBackups, // max number of backup log files
-		MaxAge:     maxDays,    // max number of days to keep old files
-		Compress:   false,      // whether to compress/archive old files
-		LocalTime:  true,       // Use local time or not
-	}
+func New(writer io.Writer, level string) *Logger {
 	sLevel := getSlogLevel(level)
-	if sLevel == slog.LevelDebug {
-		logWriter = io.MultiWriter(logWriter, os.Stdout)
+	return &Logger{
+		slog.New(NewPrettyHandler(withWriter(writer), withLever(sLevel), withCallerDepth(2), withCodeSource(true))),
 	}
-	handler := newPrettyHandler(withWriter(logWriter), withLever(sLevel), withCallerDepth(2), withCodeSource(true))
-	logger = slog.New(handler)
 }
 
-func Debug(ctx context.Context, format string, args ...any) {
-	log(ctx, slog.LevelDebug, format, args...)
+func (l *Logger) Debug(ctx context.Context, format string, args ...any) {
+	l.log(ctx, slog.LevelDebug, format, args...)
 }
 
-func Info(ctx context.Context, format string, args ...any) {
-	log(ctx, slog.LevelInfo, format, args...)
+func (l *Logger) Info(ctx context.Context, format string, args ...any) {
+	l.log(ctx, slog.LevelInfo, format, args...)
 }
 
-func Warn(ctx context.Context, format string, args ...any) {
-	log(ctx, slog.LevelWarn, format, args...)
+func (l *Logger) Warn(ctx context.Context, format string, args ...any) {
+	l.log(ctx, slog.LevelWarn, format, args...)
 }
 
-func Error(ctx context.Context, format string, args ...any) {
-	log(ctx, slog.LevelError, format, args...)
+func (l *Logger) Error(ctx context.Context, format string, args ...any) {
+	l.log(ctx, slog.LevelError, format, args...)
 }
 
-func log(ctx context.Context, level slog.Level, format string, args ...any) {
+func (l *Logger) log(ctx context.Context, level slog.Level, format string, args ...any) {
 	if len(args) > 0 {
 		format = fmt.Sprintf(format, args...)
 	}
-	logger.Log(ctx, level, format)
+	l.Log(ctx, level, format)
 }
 
 func getSlogLevel(level string) slog.Level {

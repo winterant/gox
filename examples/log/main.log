@@ -1,0 +1,8 @@
+2025-01-07 16:13:42.986735 DEBUG /Users/zhaojinglong01/Personal/Projects/gox/pkg/logger/default.go:33 [app-name=example] global config: {Log:{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}}
+2025-01-07 16:14:07.903845 DEBUG /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:42 [app-name=example] global config: {Log:{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}}
+2025-01-07 16:17:49.180589 DEBUG /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:42 [app-name=example] global config: {Log:{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}}
+2025-01-07 16:18:24.620900 DEBUG /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:42 [app-name=example] global config: {Log:{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}}
+2025-01-07 16:24:29.260853 DEBUG /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:41 [app-name=my-first-app] global config: {Log:{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}}
+2025-01-07 16:24:29.261380 INFO /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:46 [app-name=my-first-app] [a b]
+2025-01-07 16:27:13.304533 DEBUG /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:42 [app-name=my-first-app] global config: {Log:{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}}
+2025-01-07 16:27:13.304901 INFO /Users/zhaojinglong01/Personal/Projects/gox/examples/main.go:49 [app-name=my-first-app] [a b]

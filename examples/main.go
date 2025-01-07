@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/winterant/gox/pkg/x"
-
 	"github.com/winterant/gox/pkg/config"
 	"github.com/winterant/gox/pkg/logger"
+	"github.com/winterant/gox/pkg/x"
+	"os"
 )
 
 type app struct {
@@ -30,8 +30,8 @@ func MustInit() context.Context {
 
 	_ = config.LoadConfig(*AppConfPath, &App, "APP")
 
-	logger.MustInit(App.Log.Path, App.Log.MaxSizeMB, App.Log.MaxBackups, App.Log.MaxDays, App.Log.Level)
-	ctx := logger.ContextWithArgs(context.Background(), "app-name", "example")
+	logger.InitDefault(App.Log.Path, App.Log.MaxSizeMB, App.Log.MaxBackups, App.Log.MaxDays, App.Log.Level)
+	ctx := logger.ContextWithArgs(context.Background(), "app-name", "my-first-app")
 
 	return ctx
 }
@@ -44,4 +44,12 @@ func main() {
 	x.TryCatch(func(e error) {
 		logger.Error(ctx, "panic: %+v", e)
 	})
+
+	keys := x.MapKeys(map[string]int{"a": 1, "b": 2})
+	logger.Info(ctx, "%+v", keys)
+
+	log2 := logger.New(os.Stdout, "debug")
+	log2.Info(ctx, "hello this is a custom logger")
+
+	panic("panic test")
 }

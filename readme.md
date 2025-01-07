@@ -25,7 +25,7 @@ func main() {
     _ = config.LoadConfig("./conf/app.yaml", &App, "APP")
 
     // Init logger
-    logger.MustInit(App.Log.Path, App.Log.MaxSizeMB, App.Log.MaxBackups, App.Log.MaxDays, App.Log.Level)
+    logger.InitDefault(App.Log.Path, App.Log.MaxSizeMB, App.Log.MaxBackups, App.Log.MaxDays, App.Log.Level)
     ctx := logger.ContextWithArgs(context.Background(), "app-name", "example") // add context args which will print in log
 
     // Use logger
@@ -37,6 +37,14 @@ func main() {
     })
     // ... other codes which may panic ...
 
+    // Use x to get map keys
+    keys := x.MapKeys(map[string]int{"a": 1, "b": 2})
+    logger.Info(ctx, "%+v", keys)
+
+    // Use x to check context done
+    if x.CtxDone(ctx) {
+        logger.Warn(ctx, "context canceled")
+    }
 }
 ```
 
