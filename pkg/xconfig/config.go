@@ -1,4 +1,4 @@
-package config
+package xconfig
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func LoadConfig(path string, conf any, envPrefix string) *viper.Viper {
+func LoadYaml(path string, conf any, envPrefix string) *viper.Viper {
 	v := viper.New()
 	v.SetConfigFile(path)
 
