@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+
 	"github.com/winterant/gox/pkg/xerrors"
 )
 
@@ -62,5 +63,4 @@ func main() {
 		fmt.Printf("%+v\n", err) // including call stack
 		fmt.Println(xerrors.Cause(err))
 	}
-
 }

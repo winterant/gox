@@ -2,10 +2,11 @@ package xlog
 
 import (
 	"context"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 	"log/slog"
 	"os"
+
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var defaultLogger *Logger

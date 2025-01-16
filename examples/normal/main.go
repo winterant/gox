@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"flag"
+	"os"
+
 	"github.com/winterant/gox/pkg/x"
 	"github.com/winterant/gox/pkg/xconfig"
 	"github.com/winterant/gox/pkg/xlog"
-	"os"
 )
 
 type app struct {
@@ -21,7 +22,7 @@ type log struct {
 	MaxDays    int
 }
 
-var AppConfPath = flag.String("conf", "./conf/app.yaml", "app config path")
+var AppConfPath = flag.String("conf", "./examples/conf/app.yaml", "app config path")
 
 var App app
 

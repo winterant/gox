@@ -2,8 +2,9 @@ package xerrors
 
 import (
 	"fmt"
-	"github.com/winterant/gox/pkg/x"
 	"io"
+
+	"github.com/winterant/gox/pkg/x"
 )
 
 type fundamental struct {
@@ -96,11 +97,11 @@ func Wrap(err error, message string) error {
 		}
 	default: // due to no stack, wrap with stack
 		return &withStack{
-			&withMessage{
+			error: &withMessage{
 				cause:   err,
 				message: message,
 			},
-			x.GetCallerStack(1),
+			CallerStack: x.GetCallerStack(1),
 		}
 	}
 }
