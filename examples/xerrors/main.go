@@ -51,16 +51,38 @@ func main() {
 	err := xc()
 	if err != nil {
 		fmt.Println("--------------- xerrors ---------------")
-		fmt.Printf("%v\n", err)
-		fmt.Printf("%+v\n", err) // including call stack
-		fmt.Println(xerrors.Cause(err))
+		fmt.Printf("[normal]: %v\n", err)
+		fmt.Printf("[stack]: %+v\n", err) // including call stack
+		fmt.Println("[Cause]:", xerrors.Cause(err))
 	}
 
 	err = c()
 	if err != nil {
 		fmt.Println("--------------- go std error ---------------")
-		fmt.Printf("%v\n", err)
-		fmt.Printf("%+v\n", err) // including call stack
-		fmt.Println(xerrors.Cause(err))
+		fmt.Printf("[normal]: %v\n", err)
+		fmt.Printf("[stack]: %+v\n", err) // including call stack
+		fmt.Println("[Cause]:", xerrors.Cause(err))
 	}
 }
+
+/* Output:
+--------------- xerrors ---------------
+[normal]: xerrors wrap error in c(): xerrors wrap error in b(): xerrors new error
+[stack]: xerrors wrap error in c(): xerrors wrap error in b(): xerrors new error
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:11 main.xa
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:15 main.xb
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:23 main.xc
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:51 main.main
+        /Library/env/goenv/versions/1.21.13/src/runtime/proc.go:267 runtime.main
+        /Library/env/goenv/versions/1.21.13/src/runtime/asm_arm64.s:1197 runtime.goexit
+[Cause]: xerrors new error
+--------------- go std error ---------------
+[normal]: xerrors wrap error in c(): xerrors wrap error in b(): go std error
+[stack]: xerrors wrap error in c(): xerrors wrap error in b(): go std error
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:37 main.b
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:43 main.c
+        /Users/zhaojinglong01/Personal/Projects/gox/examples/xerrors/main.go:59 main.main
+        /Library/env/goenv/versions/1.21.13/src/runtime/proc.go:267 runtime.main
+        /Library/env/goenv/versions/1.21.13/src/runtime/asm_arm64.s:1197 runtime.goexit
+[Cause]: go std error
+*/

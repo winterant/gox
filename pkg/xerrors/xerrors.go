@@ -71,6 +71,7 @@ func (e *withStack) Format(s fmt.State, verb rune) {
 	}
 }
 
+// New returns an error with a message and stack.
 func New(message string) error {
 	return &fundamental{
 		message: message,
@@ -78,6 +79,7 @@ func New(message string) error {
 	}
 }
 
+// Errorf returns an error with a formatted message and stack.
 func Errorf(format string, args ...any) error {
 	return &fundamental{
 		message: fmt.Sprintf(format, args...),
@@ -85,6 +87,7 @@ func Errorf(format string, args ...any) error {
 	}
 }
 
+// Wrap returns an error wrapped an existing error with a message and stack(if lacked).
 func Wrap(err error, message string) error {
 	if err == nil {
 		return nil
@@ -106,6 +109,12 @@ func Wrap(err error, message string) error {
 	}
 }
 
+// Wrapf returns an error wrapped an existing error with a formatted message and stack(if lacked).
+func Wrapf(err error, format string, args ...any) error {
+	return Wrap(err, fmt.Sprintf(format, args...))
+}
+
+// Cause returns the source cause of an error, if possible.
 func Cause(err error) error {
 	for {
 		switch err.(type) {
