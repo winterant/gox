@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"strings"
 )
 
 type Logger struct {
@@ -42,7 +43,7 @@ func (l *Logger) log(ctx context.Context, level slog.Level, format string, args 
 }
 
 func getSlogLevel(level string) slog.Level {
-	switch level {
+	switch strings.ToLower(level) {
 	case "debug":
 		return slog.LevelDebug
 	case "info":
@@ -52,6 +53,6 @@ func getSlogLevel(level string) slog.Level {
 	case "error":
 		return slog.LevelError
 	default:
-		return slog.LevelInfo
+		panic("log level must be one of debug, info, warn, error. But got " + level)
 	}
 }
