@@ -48,7 +48,7 @@ func withCallerDepth(depth int) handlerOption {
 	}
 }
 
-func NewPrettyHandler(options ...handlerOption) *prettyHandler {
+func newPrettyHandler(options ...handlerOption) *prettyHandler {
 	handler := prettyHandler{
 		addSource:   true,
 		level:       slog.LevelInfo,

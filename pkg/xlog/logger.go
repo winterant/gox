@@ -15,7 +15,7 @@ type Logger struct {
 func New(writer io.Writer, level string) *Logger {
 	sLevel := getSlogLevel(level)
 	return &Logger{
-		Logger: slog.New(NewPrettyHandler(withWriter(writer), withLever(sLevel), withCallerDepth(2), withCodeSource(true))),
+		Logger: slog.New(newPrettyHandler(withWriter(writer), withLever(sLevel), withCallerDepth(2), withCodeSource(true))),
 	}
 }
 

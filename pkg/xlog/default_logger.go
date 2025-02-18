@@ -24,7 +24,7 @@ func InitDefault(path string, maxSizeMB, maxBackups, maxDays int, level string) 
 	if sLevel == slog.LevelDebug {
 		logWriter = io.MultiWriter(logWriter, os.Stdout)
 	}
-	handler := NewPrettyHandler(withWriter(logWriter), withLever(sLevel), withCallerDepth(3), withCodeSource(true))
+	handler := newPrettyHandler(withWriter(logWriter), withLever(sLevel), withCallerDepth(3), withCodeSource(true))
 	defaultLogger = &Logger{
 		Logger: slog.New(handler),
 	}

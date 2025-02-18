@@ -1,3 +1,6 @@
+// Package xlog provides utilities for logging with context arguments.
+// This package allows you to attach key-value pairs to a context,
+// which can be used by the logging system to print additional information.
 package xlog
 
 import "context"
