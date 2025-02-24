@@ -18,9 +18,9 @@ import (
     "github.com/winterant/gox/pkg/xconfig"
 )
 func main() {
-    // Load config file
-    _ = xconfig.LoadYaml("./conf/app.yaml", &App, "APP")
-    fmt.Println(App.Log.Name)
+    conf := xconfig.LoadYaml("./conf/app.yaml", &App, "APP")
+    fmt.Println(App.Log.Level)
+    fmt.Println(conf.GetInt("log.maxDays"))
 }
 ```
 
@@ -32,13 +32,23 @@ import (
     "github.com/winterant/gox/pkg/xlog"
 )
 func main() {
-    // Init logger
+	// Use default logger
     xlog.InitDefault("./log/main.log", 128, 100, 90, "DEBUG")
-    ctx := xlog.ContextWithArgs(context.Background(), "app-name", "example") // add context args which will print in log
+    ctx := xlog.ContextWithArgs(context.Background(), "appName", "my-example-app") // add context args which will print in log
+    xlog.Info(ctx, "hello, world")
+    xlog.Error(ctx, "I am %s", userName)
 
-    // Use logger
-    xlog.Info(ctx, "hello %s", "world")
-    xlog.Error(ctx, "error %s", "example")
+    // Use custom logger
+    logWriter := io.MultiWriter(&lumberjack.Logger{
+        Filename:   "./log/my.log", // defaultLog file path
+        MaxSize:    128,            // file max size in MB
+        MaxBackups: 100,            // max number of backup defaultLog files
+        MaxAge:     90,             // max number of days to keep old files
+        Compress:   false,          // whether to compress/archive old files
+        LocalTime:  true,           // Use local time or not
+    }, os.Stdout)
+    logger := xlog.New(logWriter, "DEBUG")
+    logger.Info(ctx, "hello, world. I am %s", userName)
 }
 ```
 
@@ -75,10 +85,10 @@ other shortcut operations:
 ```go
 package main
 import (
-	"github.com/winterant/gox/pkg/x"
+    "github.com/winterant/gox/pkg/x"
 )
 func main() {
-	m := map[string]int{"a": 1, "b": 2}
+    m := map[string]int{"a": 1, "b": 2}
     // Use x to get map keys
     keys := x.MapKeys(m)  // ["a", "b"]
 }
