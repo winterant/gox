@@ -7,6 +7,7 @@ golang extend tools, including config, logger, try-catch, slice shortcut operati
 ```
 go get -u github.com/winterant/gox
 ```
+- Required go 1.21+
 
 ## Usage & Samples
 
@@ -95,3 +96,10 @@ func main() {
 ```
 
 More samples in [./examples/](./examples/)
+
+
+## Recommended packages
+
+| Function    | Package                                                        | Install                                  |
+|-------------|----------------------------------------------------------------|------------------------------------------|
+| Http Client | [github.com/go-resty/resty](https://github.com/go-resty/resty) | `go get -u github.com/go-resty/resty/v3` |
