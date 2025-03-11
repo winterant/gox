@@ -34,7 +34,11 @@ import (
 )
 func main() {
 	// Use default logger
-    xlog.InitDefault("./log/main.log", 128, 100, 90, "DEBUG")
+	xlog.InitDefault(xlog.Option{
+		Level:  "debug",
+		Stdout: true,
+		Path:   "./log/main.log",
+	})
     ctx := xlog.ContextWithArgs(context.Background(), "appName", "my-example-app") // add context args which will print in log
     xlog.Info(ctx, "hello, world")
     xlog.Error(ctx, "I am %s", userName)
@@ -48,7 +52,9 @@ func main() {
         Compress:   false,          // whether to compress/archive old files
         LocalTime:  true,           // Use local time or not
     }, os.Stdout)
-    logger := xlog.New(logWriter, "DEBUG")
+	logger := xlog.New(xlog.Option{
+		Writer: logWriter,
+	})
     logger.Info(ctx, "hello, world. I am %s", userName)
 }
 ```

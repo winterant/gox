@@ -5,17 +5,47 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"os"
 	"strings"
+
+	"github.com/creasty/defaults"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type Logger struct {
 	*slog.Logger
 }
 
-func New(writer io.Writer, level string) *Logger {
-	sLevel := getSlogLevel(level)
+type Option struct {
+	Level      string `default:"info"`
+	Writer     io.Writer
+	Stdout     bool   `default:"false"`             // 仅当 Writer 为空时生效
+	Path       string `default:"./log/default.log"` // 仅当 Writer 为空时生效
+	MaxSizeMB  int    `default:"64"`                // 仅当 Writer 为空时生效
+	MaxBackups int    `default:"100"`               // 仅当 Writer 为空时生效
+	MaxDays    int    `default:"90"`                // 仅当 Writer 为空时生效
+}
+
+func New(opt Option) *Logger {
+	_ = defaults.Set(&opt)
+
+	if opt.Writer == nil {
+		opt.Writer = &lumberjack.Logger{
+			Filename:   opt.Path,       // defaultLog file path
+			MaxSize:    opt.MaxSizeMB,  // file max size in MB
+			MaxBackups: opt.MaxBackups, // max number of backup defaultLog files
+			MaxAge:     opt.MaxDays,    // max number of days to keep old files
+			Compress:   false,          // whether to compress/archive old files
+			LocalTime:  true,           // Use local time or not
+		}
+		if opt.Stdout {
+			opt.Writer = io.MultiWriter(opt.Writer, os.Stdout)
+		}
+	}
+
+	sLevel := getSlogLevel(opt.Level)
 	return &Logger{
-		Logger: slog.New(newPrettyHandler(withWriter(writer), withLever(sLevel), withCallerDepth(2), withCodeSource(true))),
+		Logger: slog.New(newPrettyHandler(withWriter(opt.Writer), withLever(sLevel), withCallerDepth(2), withCodeSource(true))),
 	}
 }
 

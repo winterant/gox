@@ -3,6 +3,7 @@ module github.com/winterant/gox
 go 1.21.13
 
 require (
+	github.com/creasty/defaults v1.8.0
 	github.com/spf13/viper v1.19.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
