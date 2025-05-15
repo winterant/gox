@@ -90,7 +90,10 @@ func Errorf(format string, args ...any) error {
 // Wrap returns an error wrapped an existing error with a message and stack(if lacked).
 func Wrap(err error, message string) error {
 	if err == nil {
-		return New(message)
+		return &fundamental{
+			message: message,
+			stack:   x.GetCallerStack(1),
+		}
 	}
 	switch err.(type) {
 	case *fundamental, *withMessage, *withStack: // already wrapped with stack
