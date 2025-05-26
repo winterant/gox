@@ -11,7 +11,9 @@ var contextArgsKey int
 func ContextWithArgs(ctx context.Context, kvs ...any) context.Context {
 	var args []any
 	if ctxKv := ctx.Value(&contextArgsKey); ctxKv != nil {
-		args = ctxKv.([]any)
+		if ctxArgs, ok := ctxKv.([]any); ok {
+			args = append(args, ctxArgs...)
+		}
 	}
 	args = append(args, kvs...)
 	return context.WithValue(ctx, &contextArgsKey, args)
