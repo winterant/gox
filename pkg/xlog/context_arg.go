@@ -12,6 +12,7 @@ func ContextWithArgs(ctx context.Context, kvs ...any) context.Context {
 	var args []any
 	if ctxKv := ctx.Value(&contextArgsKey); ctxKv != nil {
 		if ctxArgs, ok := ctxKv.([]any); ok {
+			args = make([]any, 0, len(ctxArgs)+len(kvs))
 			args = append(args, ctxArgs...)
 		}
 	}
