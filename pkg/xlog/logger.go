@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"log/slog"
 	"os"
 	"strings"
@@ -42,6 +43,10 @@ func New(opt Option) *Logger {
 			opt.Writer = io.MultiWriter(opt.Writer, os.Stdout)
 		}
 	}
+
+	//  收集log打的日志 2025/06/19 11:03:06.242132 /data/main.go:21: hello world
+	log.SetOutput(opt.Writer)
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile)
 
 	sLevel := getSlogLevel(opt.Level)
 	return &Logger{

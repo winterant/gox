@@ -106,8 +106,8 @@ More samples in [./examples/](./examples/)
 
 ## Recommended packages
 
-| Function        | Package                                                                          | Install                                        |
-|-----------------|----------------------------------------------------------------------------------|------------------------------------------------|
-| struct default  | [github.com/creasty/defaults](https://github.com/creasty/defaults)               | `go get -u github.com/creasty/defaults`        |
-| struct validate | [github.com/go-playground/validator](https://github.com/go-playground/validator) | `go get -u github.com/go-playground/validator` |
-| Http Client     | [github.com/go-resty/resty](https://github.com/go-resty/resty)                   | `go get -u github.com/go-resty/resty/v3`       |
+| Function        | Package                                                                          | Install                                            |
+|-----------------|----------------------------------------------------------------------------------|----------------------------------------------------|
+| struct default  | [github.com/creasty/defaults](https://github.com/creasty/defaults)               | `go get -u github.com/creasty/defaults`            |
+| struct validate | [github.com/go-playground/validator](https://github.com/go-playground/validator) | `go get -u github.com/go-playground/validator/v10` |
+| Http Client     | [github.com/go-resty/resty](https://github.com/go-resty/resty)                   | `go get -u github.com/go-resty/resty/v3`           |
