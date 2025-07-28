@@ -87,12 +87,12 @@ func Errorf(format string, args ...any) error {
 	}
 }
 
-// Wrap returns an error wrapped an existing error with a message and stack(if lacked).
-func Wrap(err error, message string) error {
+// wrap returns an error wrapped an existing error with a message and stack(if lacked).
+func wrap(err error, message string) error {
 	if err == nil {
 		return &fundamental{
 			message: message,
-			stack:   x.GetCallerStack(1),
+			stack:   x.GetCallerStack(2),
 		}
 	}
 	switch err.(type) {
@@ -107,14 +107,19 @@ func Wrap(err error, message string) error {
 				cause:   err,
 				message: message,
 			},
-			CallerStack: x.GetCallerStack(1),
+			CallerStack: x.GetCallerStack(2),
 		}
 	}
 }
 
+// Wrap returns an error wrapped an existing error with a message and stack(if lacked).
+func Wrap(err error, message string) error {
+	return wrap(err, message)
+}
+
 // Wrapf returns an error wrapped an existing error with a formatted message and stack(if lacked).
 func Wrapf(err error, format string, args ...any) error {
-	return Wrap(err, fmt.Sprintf(format, args...))
+	return wrap(err, fmt.Sprintf(format, args...))
 }
 
 // Cause returns the source cause of an error, if possible.
