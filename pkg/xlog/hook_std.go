@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path"
 	"syscall"
 	"time"
 )
@@ -22,6 +23,11 @@ func redirectOutputFile(path string, fd int) *os.File {
 func rotateOutputFile(ctx context.Context, filePathPrefix string, fd int) {
 	genFilePath := func() string {
 		return fmt.Sprintf("%s%s.log", filePathPrefix, time.Now().Format("20060102"))
+	}
+
+	// mkdir
+	if err := os.MkdirAll(path.Dir(filePathPrefix), 0755); err != nil {
+		panic(err)
 	}
 
 	// init
