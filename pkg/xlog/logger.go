@@ -18,13 +18,17 @@ type Logger struct {
 }
 
 type Option struct {
-	Level      string `default:"info"`
-	Writer     io.Writer
-	Stdout     bool   `default:"false"`             // 仅当 Writer 为空时生效
-	Path       string `default:"./log/default.log"` // 仅当 Writer 为空时生效
-	MaxSizeMB  int    `default:"64"`                // 仅当 Writer 为空时生效
-	MaxBackups int    `default:"100"`               // 仅当 Writer 为空时生效
-	MaxDays    int    `default:"90"`                // 仅当 Writer 为空时生效
+	Level string `default:"info"`
+
+	Writer     io.Writer ``                            // Custom writer for log output
+	Path       string    `default:"./log/default.log"` // Effective only when Writer is nil
+	MaxSizeMB  int       `default:"64"`                // Effective only when Writer is nil
+	MaxBackups int       `default:"500"`               // Effective only when Writer is nil
+	MaxDays    int       `default:"90"`                // Effective only when Writer is nil
+
+	Stdout bool `default:"false"` // Output the log to stdout at the same time. Don't set to true if you use xlog.HookStdout
+
+	callerDepth int `default:"2"`
 }
 
 func New(opt Option) *Logger {
@@ -39,19 +43,19 @@ func New(opt Option) *Logger {
 			Compress:   false,          // whether to compress/archive old files
 			LocalTime:  true,           // Use local time or not
 		}
-		if opt.Stdout {
-			opt.Writer = io.MultiWriter(opt.Writer, os.Stdout)
-		}
+	}
+	if opt.Stdout {
+		opt.Writer = io.MultiWriter(opt.Writer, os.Stdout)
 	}
 
-	//  收集log打的日志 2025/06/19 11:03:06.242132 /data/main.go:21: hello world
-	log.SetOutput(opt.Writer)
-	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile)
+	baseLogger := slog.New(newPrettyHandler(withWriter(opt.Writer), withLever(opt.Level), withCallerDepth(opt.callerDepth), withCodeSource(true)))
 
-	sLevel := getSlogLevel(opt.Level)
-	return &Logger{
-		Logger: slog.New(newPrettyHandler(withWriter(opt.Writer), withLever(sLevel), withCallerDepth(2), withCodeSource(true))),
-	}
+	// 截获 标准库 log 打的日志
+	log.SetFlags(0)
+	log.SetPrefix("[go-std-log] ")
+	log.SetOutput(&redirectWriter{Logger: baseLogger, level: slog.LevelInfo})
+
+	return &Logger{Logger: baseLogger}
 }
 
 func (l *Logger) Debug(ctx context.Context, format string, args ...any) {
@@ -74,20 +78,5 @@ func (l *Logger) log(ctx context.Context, level slog.Level, format string, args 
 	if len(args) > 0 {
 		format = fmt.Sprintf(format, args...)
 	}
-	l.Log(ctx, level, format)
-}
-
-func getSlogLevel(level string) slog.Level {
-	switch strings.ToLower(level) {
-	case "debug":
-		return slog.LevelDebug
-	case "info":
-		return slog.LevelInfo
-	case "warn":
-		return slog.LevelWarn
-	case "error":
-		return slog.LevelError
-	default:
-		panic("log level must be one of debug, info, warn, error. But got " + level)
-	}
+	l.Log(ctx, level, strings.TrimSpace(format))
 }

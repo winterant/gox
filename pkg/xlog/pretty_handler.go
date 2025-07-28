@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 )
 
@@ -30,9 +31,22 @@ func withWriter(writer io.Writer) handlerOption {
 	}
 }
 
-func withLever(level slog.Level) handlerOption {
+func withLever(level string) handlerOption {
+	var sLevel slog.Level
+	switch strings.ToLower(level) {
+	case "debug":
+		sLevel = slog.LevelDebug
+	case "info":
+		sLevel = slog.LevelInfo
+	case "warn":
+		sLevel = slog.LevelWarn
+	case "error":
+		sLevel = slog.LevelError
+	default:
+		panic("log level must be one of debug, info, warn, error. But got " + level)
+	}
 	return func(handler *prettyHandler) {
-		handler.level = level
+		handler.level = sLevel
 	}
 }
 

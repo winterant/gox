@@ -2,37 +2,13 @@ package xlog
 
 import (
 	"context"
-	"io"
-	"log/slog"
-	"os"
-
-	"github.com/creasty/defaults"
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var defaultLogger *Logger
 
 func InitDefault(opt Option) {
-	_ = defaults.Set(&opt)
-
-	if opt.Writer == nil {
-		opt.Writer = &lumberjack.Logger{
-			Filename:   opt.Path,       // defaultLog file path
-			MaxSize:    opt.MaxSizeMB,  // file max size in MB
-			MaxBackups: opt.MaxBackups, // max number of backup defaultLog files
-			MaxAge:     opt.MaxDays,    // max number of days to keep old files
-			Compress:   false,          // whether to compress/archive old files
-			LocalTime:  true,           // Use local time or not
-		}
-		if opt.Stdout {
-			opt.Writer = io.MultiWriter(opt.Writer, os.Stdout)
-		}
-	}
-	sLevel := getSlogLevel(opt.Level)
-	handler := newPrettyHandler(withWriter(opt.Writer), withLever(sLevel), withCallerDepth(3), withCodeSource(true))
-	defaultLogger = &Logger{
-		Logger: slog.New(handler),
-	}
+	opt.callerDepth = 3
+	defaultLogger = New(opt)
 }
 
 func Debug(ctx context.Context, format string, args ...any) {

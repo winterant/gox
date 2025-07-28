@@ -53,9 +53,17 @@ func main() {
         LocalTime:  true,           // Use local time or not
     }, os.Stdout)
 	logger := xlog.New(xlog.Option{
-		Writer: logWriter,
+		Writer: logWriter,  // Optional
 	})
     logger.Info(ctx, "hello, world. I am %s", userName)
+
+	// Hook std log to file
+	xlog.HookStdout(context.TODO(), "./log/stdout-")
+	xlog.HookStderr(context.TODO(), "./log/stderr-") // include panic
+
+	fmt.Println("hello, world! fmt.Println")       // --> ./log/stdout-*.log
+	fmt.Fprintln(os.Stdout, "hello, stdout")       // --> ./log/stdout-*.log
+	panic("hello, world! panic")                   // --> ./log/stderr-*.log
 }
 ```
 
