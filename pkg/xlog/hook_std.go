@@ -29,28 +29,27 @@ func rotateOutputFile(ctx context.Context, filePathPrefix string, fd int) {
 
 	// rotate
 	go func() {
+		ticker := time.NewTicker(10 * time.Minute)
+		defer ticker.Stop()
 		for {
 			select {
 			case <-ctx.Done():
 				return
-			default:
-			}
-
-			filePath := genFilePath()
-			if currentFile.Name() != filePath {
-				nextFile := redirectOutputFile(filePath, fd)
-				fmt.Println(currentFile)
-				if currentFile != nil {
-					currentFile.Close()
-					// Remove if file is empty.
-					if info, err := os.Stat(currentFile.Name()); err == nil && info.Size() == 0 {
-						_ = os.Remove(currentFile.Name())
+			case <-ticker.C:
+				filePath := genFilePath()
+				if filePath != currentFile.Name() {
+					nextFile := redirectOutputFile(filePath, fd)
+					fmt.Println(currentFile)
+					if currentFile != nil {
+						_ = currentFile.Close()
+						// Remove if file is empty.
+						if info, err := os.Stat(currentFile.Name()); err == nil && info.Size() == 0 {
+							_ = os.Remove(currentFile.Name())
+						}
 					}
+					currentFile = nextFile
 				}
-				currentFile = nextFile
 			}
-
-			time.Sleep(10 * time.Minute)
 		}
 	}()
 }
