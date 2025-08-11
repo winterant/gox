@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+
 	"github.com/winterant/gox/pkg/xconfig"
 )
 
@@ -27,13 +28,13 @@ func main() {
 
 	conf := xconfig.LoadYaml(*AppConfPath, &App, "APP")
 
-	fmt.Println(App.Log.Level)
+	fmt.Printf("%+v\n", App.Log)
 	fmt.Println(conf.GetString("log.path"))
 	fmt.Println(conf.GetInt("log.maxDays"))
 }
 
 /*
-debug
+{Level:debug Path:./log/main.log MaxSizeMB:128 MaxBackups:30 MaxDays:90}
 ./log/main.log
 90
 */

@@ -7,5 +7,7 @@ log:
   level: debug          # debug,info,warn,error. 其中debug级别会额外将日志打印到终端
   path: ./log/main.log  # 日志保存位置
   maxSizeMB: 128        # 最大单日志文件体积 MB
-  maxBackups: 30        # 最多保存日志文件数
-  maxDays: 90           # 最长保存天数
+  MaxBackups: 30        # 最多保存日志文件数
+  MAXDAYS: 90           # 最长保存天数
+
+# 注意：使用xconfig解析时，字段名大小写不敏感，如上所示均可反序列化，但是不支持下划线命名或者短线命名
