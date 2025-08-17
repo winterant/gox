@@ -4,14 +4,15 @@ golang extend tools, including config, logger, try-catch, slice shortcut operati
 
 ## Installation
 
+- Required go 1.21+
+
 ```
 go get -u github.com/winterant/gox
 ```
-- Required go 1.21+
 
 ## Usage & Samples
 
-Use config:
+**Use config**:
 ```go
 package main
 import (
@@ -25,7 +26,7 @@ func main() {
 }
 ```
 
-Use log:
+**Use logger**:
 ```go
 package main
 import (
@@ -67,7 +68,7 @@ func main() {
 }
 ```
 
-Use try-catch:
+**Use try-catch**:
 ```go
 package main
 import (
@@ -82,31 +83,19 @@ func main() {
 }
 ```
 
-Check context canceled:
+**Check context canceled**:
 ```go
-package main
-import (
-    "github.com/winterant/gox/pkg/x"
-)
-func main() {
     // Use x to check context done
     if x.CtxDone(ctx) {
         fmt.Println("context canceled")
     }
-}
 ```
 
-other shortcut operations:
+**other shortcut operations**:
 ```go
-package main
-import (
-    "github.com/winterant/gox/pkg/x"
-)
-func main() {
     m := map[string]int{"a": 1, "b": 2}
     // Use x to get map keys
     keys := x.MapKeys(m)  // ["a", "b"]
-}
 ```
 
 More samples in [./examples/](./examples/)
