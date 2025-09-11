@@ -2,12 +2,10 @@ package x
 
 import "encoding/json"
 
-func AnyTo[T any](value any) *T {
-	bytes := ToJsonBytes(value)
-	t := new(T)
-	err := json.Unmarshal(bytes, t)
-	if err != nil {
-		return nil
+func AnyTo[T any](value any, target *T) {
+	if target == nil {
+		return
 	}
-	return t
+	bytes := ToJsonBytes(value)
+	_ = json.Unmarshal(bytes, target)
 }

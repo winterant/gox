@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/winterant/gox/pkg/x"
+	"github.com/winterant/gox/pkg/xcaller"
 )
 
 type fundamental struct {
 	message string
-	stack   *x.CallerStack
+	stack   *xcaller.CallerStack
 }
 
 type withMessage struct {
@@ -19,7 +19,7 @@ type withMessage struct {
 
 type withStack struct {
 	error
-	*x.CallerStack
+	*xcaller.CallerStack
 }
 
 func (e *fundamental) Error() string { return e.message }
@@ -75,7 +75,7 @@ func (e *withStack) Format(s fmt.State, verb rune) {
 func New(message string) error {
 	return &fundamental{
 		message: message,
-		stack:   x.GetCallerStack(1),
+		stack:   xcaller.GetCallerStack(1),
 	}
 }
 
@@ -83,7 +83,7 @@ func New(message string) error {
 func Errorf(format string, args ...any) error {
 	return &fundamental{
 		message: fmt.Sprintf(format, args...),
-		stack:   x.GetCallerStack(1),
+		stack:   xcaller.GetCallerStack(1),
 	}
 }
 
@@ -92,7 +92,7 @@ func wrap(err error, message string) error {
 	if err == nil {
 		return &fundamental{
 			message: message,
-			stack:   x.GetCallerStack(2),
+			stack:   xcaller.GetCallerStack(2),
 		}
 	}
 	switch err.(type) {
@@ -107,7 +107,7 @@ func wrap(err error, message string) error {
 				cause:   err,
 				message: message,
 			},
-			CallerStack: x.GetCallerStack(2),
+			CallerStack: xcaller.GetCallerStack(2),
 		}
 	}
 }
