@@ -30,7 +30,7 @@ func FromJson(jsonStr string, v any) (string, error) {
 	}
 	var errs []error
 	for i := 0; i < 3; i++ {
-		err := json.Unmarshal([]byte(jsonStr), &v)
+		err := json.Unmarshal([]byte(jsonStr), v)
 		if err != nil {
 			errs = append(errs, err)
 			unquoted, err := strconv.Unquote(jsonStr)
