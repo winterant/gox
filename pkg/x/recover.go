@@ -1,18 +1,23 @@
 package x
 
-import "github.com/winterant/gox/pkg/xcaller"
+import (
+	"fmt"
+
+	"github.com/winterant/gox/pkg/xcaller"
+)
 
 // Recover Deprecated catch panic and recover. call it at start of goroutine.
 // For example:
 //
 //	go func(){
-//		defer Recover()
+//		defer Recover(func(err error){
+//			log.Println(err)
+//		})
 //		...
 //	}()
-//
-// Deprecated: No more maintenance, directly use r:=recover
-func Recover(f func(panicMessage any, callstack *xcaller.CallerStack)) {
+func Recover(f func(error)) {
 	if r := recover(); r != nil {
-		f(r, xcaller.GetCallerStack(2))
+		err := fmt.Errorf("%+v\n%s", r, xcaller.GetCallerStack(2).String())
+		f(err)
 	}
 }
