@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"io"
-	"os"
 
 	"gopkg.in/natefinch/lumberjack.v2"
 
@@ -31,9 +30,10 @@ func main() {
 		MaxAge:     90,             // max number of days to keep old files
 		Compress:   false,          // whether to compress/archive old files
 		LocalTime:  true,           // Use local time or not
-	}, os.Stdout)
+	})
 	logger := xlog.New(xlog.Option{
 		Writer: logWriter,
+		Stdout: true,
 	})
 	logger.Info(ctx, "hello, world. I am %s", userName)
 }
