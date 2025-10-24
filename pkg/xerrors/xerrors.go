@@ -24,7 +24,7 @@ type withStack struct {
 
 func (e *fundamental) Error() string { return e.message }
 
-func (e *withMessage) Error() string { return e.message }
+func (e *withMessage) Error() string { return fmt.Sprintf("%s: %v", e.message, e.cause) }
 
 func (e *fundamental) Format(s fmt.State, verb rune) {
 	switch verb {
@@ -50,9 +50,9 @@ func (e *withMessage) Format(s fmt.State, verb rune) {
 		}
 		fallthrough
 	case 's':
-		fmt.Fprintf(s, "%s: %s", e.message, e.cause)
+		fmt.Fprintf(s, "%s: %v", e.message, e.cause)
 	case 'q':
-		fmt.Fprintf(s, `"%s: %s"`, e.message, e.cause)
+		fmt.Fprintf(s, `"%s: %v"`, e.message, e.cause)
 	}
 }
 
@@ -65,7 +65,7 @@ func (e *withStack) Format(s fmt.State, verb rune) {
 		}
 		fallthrough
 	case 's':
-		fmt.Fprintf(s, "%s", e.error)
+		fmt.Fprintf(s, "%v", e.error)
 	case 'q':
 		fmt.Fprintf(s, "%q", e.error)
 	}
