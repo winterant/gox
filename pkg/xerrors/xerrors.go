@@ -71,6 +71,20 @@ func (e *withStack) Format(s fmt.State, verb rune) {
 	}
 }
 
+func (e *withMessage) Unwrap() error {
+	return e.cause
+}
+
+func (e *withStack) Unwrap() error {
+	u, ok := e.error.(interface {
+		Unwrap() error
+	})
+	if !ok {
+		return nil
+	}
+	return u.Unwrap()
+}
+
 // New returns an error with a message and stack.
 func New(message string) error {
 	return &fundamental{
