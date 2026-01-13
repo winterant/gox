@@ -26,9 +26,9 @@ type Option struct {
 	MaxBackups int       `default:"500"`               // Effective only when Writer is nil
 	MaxDays    int       `default:"90"`                // Effective only when Writer is nil
 
-	Stdout       bool   `default:"false"`         // Output the log to stdout at the same time.
-	HookStdoutTo string `default:"./log/stdout-"` // hook stdout to file with filepath prefix ONLY when Stdout is false
-	HookStderrTo string `default:"./log/stderr-"` // hook stderr to file with filepath prefix ONLY when Stdout is false
+	Stdout       bool   `default:"false"`             // If true, copy the log and output it to stdout
+	HookStdoutTo string `default:"./log/std/stdout-"` // hook stdout to file with filepath prefix ONLY when Stdout is false
+	HookStderrTo string `default:"./log/std/stderr-"` // hook stderr to file with filepath prefix ONLY when Stdout is false
 
 	callerDepth int
 }

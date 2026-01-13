@@ -46,7 +46,7 @@ func (e *fundamental) Format(s fmt.State, verb rune) {
 //			log.Println(err)
 //		})
 //	}()
-func Recover(f func(error)) {
+func Recover(f func(recoverErr error)) {
 	if r := recover(); r != nil {
 		err := &fundamental{
 			message: fmt.Sprintf("%+v", r),
